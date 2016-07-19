@@ -1,0 +1,55 @@
+name:                marathon-baton
+version:             0.1.0.0
+synopsis:            Initial project template from stack
+description:         Please see README.md
+homepage:            https://github.com/vipo/marathon-baton#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Viaceslav Pozdniakov
+maintainer:          v.pozdniakov@gmail.com
+copyright:           2016 Viaceslav Pozdniakov
+category:            Web
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+executable marathon-baton
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  other-modules:       Baton.Controller
+                     , Baton.Types
+                     , Baton.DockerRegistry
+                     , Baton.Marathon
+                     , Baton.Pages.Apps
+                     , Baton.Pages.Deploy
+                     , Baton.Pages.Header
+                     , Baton.Pages.Report
+                     , Baton.Runner
+                     , Baton.Versioning
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       aeson
+                     , base
+                     , blaze-html
+                     , HTTP
+                     , lens
+                     , mtl
+                     , process
+                     , scotty
+                     , split
+                     , text
+                     , wai-extra
+                     , wreq
+  default-language:    Haskell2010
+
+test-suite marathon-baton-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , marathon-baton
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/vipo/marathon-baton
