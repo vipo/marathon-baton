@@ -47,6 +47,9 @@ flags: {}
 # Extra package databases containing global packages
 extra-package-dbs: []
 
+docker:
+  enable: true
+
 # Control whether we use the GHC we find on the path
 system-ghc: false
 #
@@ -64,3 +67,8 @@ system-ghc: false
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
+
+image:
+  container:
+    base: "fpco/ubuntu-with-libgmp:14.04"
+    name: "vipo/marathon-baton"

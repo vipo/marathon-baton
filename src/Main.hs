@@ -5,6 +5,7 @@ module Main where
 import qualified Baton.Types as T
 import qualified Baton.Controller as C
 
+import           Control.Applicative
 import           Control.Monad.Reader
 import           Data.Monoid        (mconcat)
 import           Data.List.Split    (endBy)
@@ -14,10 +15,10 @@ import           Web.Scotty.Trans
 main :: IO ()
 main = do
   marathonUrl <- getEnv "MARATHON_URL"
-  registries <- fmap (endBy ",") $ getEnv "DOCKER_REGISTRIES"
+  registries <- endBy "," <$> getEnv "DOCKER_REGISTRIES"
   args <- getArgs
   let !conf = case args of
-        (path : []) -> T.Configuration marathonUrl registries path
-        _           -> error "Please provide path to deployment execuable"
+        [path] -> T.Configuration marathonUrl registries path
+        _      -> error "Please provide path to deployment execuable"
   let reader r = runReaderT r conf
   scottyT 3000 reader C.routes

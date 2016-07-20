@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Baton.Pages.Header(
-    header
-)where
+  header
+) where
 
 import qualified Text.Blaze.Html5 as H
-import Text.Blaze.Html5 ((!), toHtml)
+import           Text.Blaze.Html5 ((!), toHtml)
 import qualified Text.Blaze.Html5.Attributes as A
 
 header :: String -- ^ Title

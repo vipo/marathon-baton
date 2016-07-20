@@ -55,4 +55,4 @@ dockerApps url = do
   let appList = apps $ r ^. responseBody
   let containerList = [(appId a, c) | a <- appList, c <- M.maybeToList (appContainer a)]
   let dockerList = [ (n, image d) | (n, c) <- containerList, containerType c == "DOCKER", d <- M.maybeToList (docker c)]
-  return $ map (\(n, i) -> T.MarathonApp n i) dockerList
+  return $ map (uncurry T.MarathonApp) dockerList

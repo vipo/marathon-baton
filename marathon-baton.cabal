@@ -1,6 +1,6 @@
 name:                marathon-baton
-version:             0.1.0.0
-synopsis:            Initial project template from stack
+version:             0.1.0
+synopsis:            Marathon application deployment tool
 description:         Please see README.md
 homepage:            https://github.com/vipo/marathon-baton#readme
 license:             BSD3
@@ -8,7 +8,7 @@ license-file:        LICENSE
 author:              Viaceslav Pozdniakov
 maintainer:          v.pozdniakov@gmail.com
 copyright:           2016 Viaceslav Pozdniakov
-category:            Web
+category:            Util
 build-type:          Simple
 -- extra-source-files:
 cabal-version:       >=1.10

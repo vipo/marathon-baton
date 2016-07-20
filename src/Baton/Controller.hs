@@ -40,7 +40,7 @@ routes = do
     app <- readDockerApp
     let d = docker app
     tags <- liftIO $ listTags (registry d) (name d)
-    blaze $ PD.page app tags
+    blaze $ PD.page app $ orderVersions tags
   post "/run" $ do
     app <- readDockerApp
     conf <- lift ask

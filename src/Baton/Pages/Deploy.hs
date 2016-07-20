@@ -34,7 +34,7 @@ page (DockerApp n (DockerImage i r t)) versions =
           H.input ! A.readonly "readonly" ! A.name "image" ! A.id "image" ! A.value (toValue i)
         H.div ! A.class_ "pure-control-group" $ do
           H.label ! A.for "version" $ "Image tag"
-          H.select ! A.name "version" ! A.id "version" $ do
+          H.select ! A.name "version" ! A.id "version" $
             forM_ versions (versionOption t)
         H.div ! A.class_ "pure-controls" $
           H.button ! A.type_ "submit" ! A.class_ "pure-button pure-button-primary" $ "Deploy"

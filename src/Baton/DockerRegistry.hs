@@ -5,14 +5,14 @@ module Baton.DockerRegistry (
 
 import qualified Baton.Types as T
 
-import Control.Lens
+import           Control.Lens
 
-import Data.Aeson
-import Data.Aeson.Types
+import           Data.Aeson
+import           Data.Aeson.Types
 
 import qualified Data.Maybe as M
 
-import Network.Wreq
+import           Network.Wreq
 
 data Tags = Tags {
     name :: String

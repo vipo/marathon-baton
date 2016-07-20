@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Baton.Pages.Apps(
-page
+  page
 ) where
 
 import           Baton.Types

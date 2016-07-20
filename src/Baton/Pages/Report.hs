@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Baton.Pages.Report(
-page
+  page
 ) where
 
 import           Baton.Pages.Header
 
-import System.Exit
+import           System.Exit (ExitCode(..))
 
 import qualified Text.Blaze.Html5 as H
 import           Text.Blaze.Html5 ((!), toHtml, toValue)
@@ -17,7 +17,7 @@ page (code, stdout, stderr) = header "Report" $ do
   case code of
     ExitSuccess -> H.h1 ! A.style "color:green;" $ "OK"
     ExitFailure v -> H.h1 ! A.style "color:red;" $ toHtml ("Exit code: " ++ show v)
-  H.form ! A.class_ "pure-form pure-form-aligned" $ do
+  H.form ! A.class_ "pure-form pure-form-aligned" $
     H.fieldset $ do
       H.div ! A.class_ "pure-control-group" $ do
         H.label ! A.for "stdout" $ "Stdout:"
