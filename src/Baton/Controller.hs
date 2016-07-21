@@ -30,7 +30,7 @@ import           Network.Wai.Middleware.Static
 routes :: ScottyT LT.Text (ReaderT Configuration IO) ()
 routes = do
   middleware logStdout
-  middleware $ staticPolicy (noDots >-> addBase "runs" >-> hasPrefix "run")
+  middleware $ staticPolicy (noDots >-> addBase ".")
   get "/" $
     redirect "/apps"
   get "/apps" $ do

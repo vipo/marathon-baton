@@ -22,11 +22,11 @@ run :: Configuration  -- ^ configuration
     -> IO String      -- ^ uuid of run
 run conf (DockerApp n (DockerImage i r t)) = do
   uuid <- fmap toString nextRandom
-  let dir = workingDir conf ++ "/runs/" ++ uuid
+  let dir = workingDir conf ++ "/run/" ++ uuid
   createDirectoryIfMissing True dir
-  stdout <- openFile (dir ++ "/stdout") WriteMode
+  stdout <- openFile (dir ++ "/stdout.txt") WriteMode
   hSetBuffering stdout NoBuffering
-  stderr <- openFile (dir ++ "/stderr") WriteMode
+  stderr <- openFile (dir ++ "/stderr.txt") WriteMode
   hSetBuffering stderr NoBuffering
   (_, _, _, ph) <-
       createProcess (proc (pathToExecutable conf) [n, r ++ "/" ++ i, t]) {
