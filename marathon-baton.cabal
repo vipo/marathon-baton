@@ -30,6 +30,7 @@ executable marathon-baton
   build-depends:       aeson
                      , base
                      , blaze-html
+                     , directory
                      , HTTP
                      , lens
                      , mtl
@@ -37,7 +38,9 @@ executable marathon-baton
                      , scotty
                      , split
                      , text
+                     , uuid
                      , wai-extra
+                     , wai-middleware-static
                      , wreq
   default-language:    Haskell2010
 

@@ -25,5 +25,5 @@ header t b =
     H.body b
 
 css = unlines [
-    ".button-xsmall { font-size: 50%; }"
+    ".button-xsmall { font-size: 70%; }"
   ]

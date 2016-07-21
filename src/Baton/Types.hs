@@ -4,6 +4,7 @@ where
 data Configuration = Configuration {
     marathonUrl :: String
   , dockerRegistries :: [String]
+  , workingDir :: String
   , pathToExecutable :: String
 } deriving Show
 

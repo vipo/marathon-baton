@@ -25,11 +25,13 @@ import           Text.Blaze.Html.Renderer.Text (renderHtml)
 import           Web.Scotty.Trans
 
 import           Network.Wai.Middleware.RequestLogger
+import           Network.Wai.Middleware.Static
 
 routes :: ScottyT LT.Text (ReaderT Configuration IO) ()
 routes = do
   middleware logStdout
-  get "/" $ do
+  middleware $ staticPolicy (noDots >-> addBase "runs" >-> hasPrefix "run")
+  get "/" $
     redirect "/apps"
   get "/apps" $ do
     conf <- lift ask
@@ -42,10 +44,10 @@ routes = do
     tags <- liftIO $ listTags (registry d) (name d)
     blaze $ PD.page app $ orderVersions tags
   post "/run" $ do
-    app <- readDockerApp
     conf <- lift ask
-    report <- liftIO $ run (pathToExecutable conf) app
-    blaze $ PR.page report
+    app <- readDockerApp
+    uuid <- liftIO $ run conf app
+    blaze $ PR.page uuid
 
 readDockerApp :: ActionT LT.Text (ReaderT Configuration IO) DockerApp
 readDockerApp = do
