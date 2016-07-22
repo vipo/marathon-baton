@@ -47,6 +47,9 @@ routes = do
     conf <- lift ask
     app <- readDockerApp
     uuid <- liftIO $ run conf app
+    redirect $ LT.pack $ "/run/" ++ uuid
+  get "/run/:uuid" $ do
+    uuid <- param "uuid"
     blaze $ PR.page uuid
 
 readDockerApp :: ActionT LT.Text (ReaderT Configuration IO) DockerApp

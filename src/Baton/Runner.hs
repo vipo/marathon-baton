@@ -6,6 +6,8 @@ module Baton.Runner(
 
 import           Baton.Types
 
+import           Control.Concurrent
+
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as LT
 
@@ -24,6 +26,7 @@ run conf (DockerApp n (DockerImage i r t)) = do
   uuid <- fmap toString nextRandom
   let dir = workingDir conf ++ "/run/" ++ uuid
   createDirectoryIfMissing True dir
+  writeStatus dir "Running"
   stdout <- openFile (dir ++ "/stdout.txt") WriteMode
   hSetBuffering stdout NoBuffering
   stderr <- openFile (dir ++ "/stderr.txt") WriteMode
@@ -34,4 +37,12 @@ run conf (DockerApp n (DockerImage i r t)) = do
         , std_err = UseHandle stderr
         , cwd = Just dir
       }
+  forkIO $ waitForCompletion dir ph
   return uuid
+
+writeStatus dir str =
+  writeFile (dir ++ "/status.txt") "Running"
+
+waitForCompletion dir ph = do
+  status <- waitForProcess ph
+  writeStatus dir (show status)
