@@ -15,13 +15,21 @@ page :: String -- ^ uuid of run
      -> H.Html
 page uuid = header "Logs" $ do
   H.h1 "Logs"
-  H.form ! A.class_ "pure-form pure-form-aligned" $
-    H.fieldset $ do
-      H.div ! A.class_ "pure-control-group" $ do
-        H.label ! A.for "stdout" $ "Stdout:"
-        H.iframe ! A.src ( toValue (concat ["/run/", uuid, "/stdout.txt"])) $ ""
-        --H.textarea ! A.id "stdout" ! A.rows "12" ! A.cols "120" ! A.readonly "readonly" $ toHtml stdout
-      H.div ! A.class_ "pure-control-group" $ do
-        H.label ! A.for "stderr" $ "Stderr:"
-        H.iframe ! A.src ( toValue (concat ["/run/", uuid, "/stderr.txt"])) $ ""
-        --H.textarea ! A.id "stderr" ! A.rows "12" ! A.cols "120" ! A.readonly "readonly" $ toHtml stderr
+  H.h2 "Stdout"
+  H.iframe ! A.style style ! A.id "stdout" $ ""
+  H.h2 "Stderr"
+  H.iframe ! A.style style ! A.id "stderr" $ ""
+  H.script $ toHtml $ script stdoutSrc stderrSrc
+  where
+    stdoutSrc = concat ["/run/", uuid, "/stdout.txt"]
+    stderrSrc = concat ["/run/", uuid, "/stderr.txt"]
+
+style = "width: 100%; height: 30vh;"
+
+script o e = unlines [
+    "window.setInterval('reloadIFrames();', 1000);"
+  , "function reloadIFrames() {"
+  , "document.getElementById('stdout').src='" ++ o ++ "';"
+  , "document.getElementById('stderr').src='" ++ e ++ "';"
+  , "}"
+  ]

@@ -22,7 +22,11 @@ header t b =
         A.rel "stylesheet" !
         A.href "http://yui.yahooapis.com/pure/0.6.0/pure-min.css"
       H.style $ toHtml css
-    H.body b
+    H.body $
+      H.div ! A.class_ "pure-g" $ do
+        H.div ! A.class_ "pure-u-2-24" $ ""
+        H.div ! A.class_ "pure-u-20-24" $ b
+        H.div ! A.class_ "pure-u-2-24" $ ""
 
 css = unlines [
     ".button-xsmall { font-size: 70%; }"
