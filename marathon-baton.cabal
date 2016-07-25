@@ -39,6 +39,7 @@ executable marathon-baton
                      , split
                      , text
                      , uuid
+                     , unix
                      , wai-extra
                      , wai-middleware-static
                      , wreq
