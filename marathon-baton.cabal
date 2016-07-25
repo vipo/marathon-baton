@@ -1,5 +1,5 @@
 name:                marathon-baton
-version:             0.2.0
+version:             0.2.1
 synopsis:            Marathon application deployment tool
 description:         Please see README.md
 homepage:            https://github.com/vipo/marathon-baton#readme
