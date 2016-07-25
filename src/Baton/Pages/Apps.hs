@@ -29,21 +29,26 @@ page marUrl apps = header "Applications" $ do
         H.th "Registry"
         H.th "Docker image"
         H.th "Image tag"
-        H.th "Control"
+        H.th ! A.colspan "2" $"Actions"
     H.tbody $
       forM_ apps appTableRow
   where
     appTableRow :: DockerApp -> H.Html
     appTableRow (DockerApp n (DockerImage i r t)) =
-      H.tr $
-        H.form ! A.action "/deploy" ! A.method "get" $ do
-          H.td $ H.a ! A.href (toValue (marUrl ++ "/ui/#/apps/" ++ urlEncode n)) $ toHtml n
-          H.td $ toHtml r
-          H.td $ toHtml i
-          H.td $ toHtml t
-          H.td $ do
+      H.tr $ do
+        H.td $ toHtml n
+        H.td $ toHtml r
+        H.td $ toHtml i
+        H.td $ toHtml t
+        H.td $
+          H.form ! A.action "/deploy" ! A.method "get" $ do
             H.input ! A.type_ "hidden" ! A.name "app" ! A.value (toValue n)
             H.input ! A.type_ "hidden" ! A.name "image" ! A.value (toValue i)
             H.input ! A.type_ "hidden" ! A.name "version" ! A.value (toValue t)
             H.input ! A.type_ "hidden" ! A.name "registry" ! A.value (toValue r)
-            H.button ! A.class_ "button-xsmall pure-button-primary pure-button" $ "Versions"
+            H.button ! A.class_ "button-xsmall pure-button-primary pure-button" $ "New version"
+        H.td $
+          H.form ! A.action (toValue (marUrl ++ "/ui/#/apps/" ++ urlEncode n)) !
+            A.method "get" $
+            H.button !
+              A.class_ "button-xsmall button-success pure-button" $ "Marathon"

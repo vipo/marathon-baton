@@ -40,8 +40,8 @@ run conf (DockerApp n (DockerImage i r t)) = do
   forkIO $ waitForCompletion dir ph
   return uuid
 
-writeStatus dir str =
-  writeFile (dir ++ "/status.txt") "Running"
+writeStatus dir str = do
+  writeFile (dir ++ "/status.txt") str
 
 waitForCompletion dir ph = do
   status <- waitForProcess ph

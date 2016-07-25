@@ -20,7 +20,9 @@ header t b =
       H.title (toHtml ("Marathon Baton: " ++ t))
       H.link !
         A.rel "stylesheet" !
-        A.href "http://yui.yahooapis.com/pure/0.6.0/pure-min.css"
+        A.href "///yui.yahooapis.com/pure/0.6.0/pure-min.css"
+      H.script !
+        A.src "///code.jquery.com/jquery-3.1.0.min.js" $ ""
       H.style $ toHtml css
     H.body $
       H.div ! A.class_ "pure-g" $ do
@@ -30,4 +32,5 @@ header t b =
 
 css = unlines [
     ".button-xsmall { font-size: 70%; }"
+  , ".button-success { background: rgb(28, 184, 65); }"
   ]
