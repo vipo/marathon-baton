@@ -32,6 +32,8 @@ executable marathon-baton
                      , blaze-html
                      , directory
                      , HTTP
+                     , http-client
+                     , http-client-tls
                      , lens
                      , mtl
                      , process

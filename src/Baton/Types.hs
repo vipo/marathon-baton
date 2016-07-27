@@ -1,12 +1,15 @@
 module Baton.Types
 where
 
+import qualified Network.Wreq as W
+
 data Configuration = Configuration {
     marathonUrl :: String
   , dockerRegistries :: [String]
   , workingDir :: String
   , pathToExecutable :: String
-} deriving Show
+  , wreqOptions :: W.Options
+}
 
 data MarathonApp = MarathonApp {
     appName :: String

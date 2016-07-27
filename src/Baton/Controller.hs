@@ -35,13 +35,13 @@ routes = do
     redirect "/apps"
   get "/apps" $ do
     conf <- lift ask
-    let marUrl = marathonUrl conf
-    apps <- liftIO $ dockerApps marUrl
-    blaze $ PA.page marUrl $ localApps conf apps
+    apps <- liftIO $ dockerApps conf
+    blaze $ PA.page (marathonUrl conf) $ localApps conf apps
   get "/deploy" $ do
+    conf <- lift ask
     app <- readDockerApp
     let d = docker app
-    tags <- liftIO $ listTags (registry d) (name d)
+    tags <- liftIO $ listTags conf (registry d) (name d)
     blaze $ PD.page app $ orderVersions tags
   post "/run" $ do
     conf <- lift ask

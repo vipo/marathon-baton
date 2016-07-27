@@ -23,10 +23,11 @@ instance FromJSON Tags where
   parseJSON (Object v) = Tags <$> v .: "name" <*> v .: "tags"
   parseJSON wat        = typeMismatch "Tags" wat
 
-listTags :: String      -- ^ docker registry
-         -> String      -- ^ image name
-         -> IO [String] -- ^ tags
-listTags registry image = do
+listTags :: T.Configuration -- ^ app conf
+         -> String          -- ^ docker registry
+         -> String          -- ^ image name
+         -> IO [String]     -- ^ tags
+listTags conf registry image = do
   let url = "https://" ++ registry ++ "/v2/" ++ image ++ "/tags/list"
-  r <- asJSON =<< get url :: IO (Response Tags)
+  r <- asJSON =<< getWith (T.wreqOptions conf) url :: IO (Response Tags)
   return $ tags $ r ^. responseBody

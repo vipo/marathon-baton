@@ -48,10 +48,10 @@ instance FromJSON Apps where
   parseJSON (Object v) = Apps <$> v .: "apps"
   parseJSON wat        = typeMismatch "Apps" wat
 
-dockerApps :: String           -- ^ Marathon api url
+dockerApps :: T.Configuration    -- ^ Marathon api url
            -> IO [T.MarathonApp] -- ^ Currently running apps
-dockerApps url = do
-  r <- asJSON =<< get (url ++ "/v2/apps") :: IO (Response Apps)
+dockerApps conf = do
+  r <- asJSON =<< getWith (T.wreqOptions conf) (T.marathonUrl conf ++ "/v2/apps") :: IO (Response Apps)
   let appList = apps $ r ^. responseBody
   let containerList = [(appId a, c) | a <- appList, c <- M.maybeToList (appContainer a)]
   let dockerList = [ (n, image d) | (n, c) <- containerList, containerType c == "DOCKER", d <- M.maybeToList (docker c)]

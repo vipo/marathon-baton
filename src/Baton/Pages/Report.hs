@@ -16,7 +16,7 @@ page :: String -- ^ uuid of run
 page uuid = header "Logs" $ do
   H.h1 "Logs"
   H.h2 "Status"
-  H.h3 ! A.id "status" $ ""
+  H.h3 ! A.id "status" $ "Unknown"
   H.h2 "Stdout"
   H.textarea !
     A.style (toValue (style ++ "background-color: limegreen;")) !
@@ -38,10 +38,11 @@ style = "width: 100%; height: 30vh; font-family: monospace; "
 
 script s o e = unlines [
     "mb_timer = window.setInterval('reloadIFrames();', 1000);"
+  , "function scrollToBottom(id){$(id).scrollTop($(id)[0].scrollHeight);}"
   , "function reloadIFrames() {"
   , "$.get('" ++ s ++ "', function(d){$('#status').html(d); mb_status = d});"
-  , "$.get('" ++ o ++ "', function(d){$('#stdout').html(d)});"
-  , "$.get('" ++ e ++ "', function(d){$('#stderr').html(d)});"
+  , "$.get('" ++ o ++ "', function(d){$('#stdout').html(d); scrollToBottom('#stdout')});"
+  , "$.get('" ++ e ++ "', function(d){$('#stderr').html(d); scrollToBottom('#stderr')});"
   , "if (typeof mb_status == 'string' && mb_status.startsWith('Exit')) window.clearInterval(mb_timer)"
   , "}"
   ]
