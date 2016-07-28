@@ -27,11 +27,9 @@ page uuid = header "Logs" $ do
     A.style (toValue (style ++ "background-color: indianred;")) !
     A.id "stderr" !
     A.readonly "readonly" $ ""
-  H.script $ toHtml $ script statusSrc stdoutSrc stderrSrc
+  H.script $ toHtml $ script (src "status") (src "stdout") (src "stderr")
   where
-    stdoutSrc = concat ["/run/", uuid, "/stdout.txt"]
-    stderrSrc = concat ["/run/", uuid, "/stderr.txt"]
-    statusSrc = concat ["/run/", uuid, "/status.txt"]
+    src s = concat ["/run/", uuid, "/", s, ".txt"]
 
 style :: String
 style = "width: 100%; height: 30vh; font-family: monospace; "
