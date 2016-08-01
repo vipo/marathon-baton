@@ -3,7 +3,7 @@ module Baton.Pages.Report(
   page
 ) where
 
-import           Baton.Pages.Header
+import           Baton.Pages.Commons
 
 import           System.Exit (ExitCode(..))
 

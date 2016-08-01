@@ -5,13 +5,14 @@ module Baton.Pages.Apps(
 ) where
 
 import           Baton.Types
-import           Baton.Pages.Header
+import           Baton.Pages.Commons
 
 import           Control.Monad (forM_)
 
 import qualified Data.Maybe as M
+import qualified Data.List as L
 
-import           Network.HTTP.Base (urlEncode)
+import           Network.HTTP.Base (urlEncodeVars, urlEncode)
 
 import qualified Text.Blaze.Html5 as H
 import           Text.Blaze.Html5 ((!), toHtml, toValue)
@@ -26,29 +27,22 @@ page marUrl apps = header "Applications" $ do
     H.thead $
       H.tr $ do
         H.th "Application name"
-        H.th "Registry"
         H.th "Docker image"
         H.th "Image tag"
-        H.th ! A.colspan "2" $"Actions"
     H.tbody $
       forM_ apps appTableRow
   where
+    appSiblings r i = map (\a -> ("app", appId a)) $
+        filter (\a -> i == name (docker a) && r == registry (docker a)) apps
     appTableRow :: DockerApp -> H.Html
     appTableRow (DockerApp n (DockerImage i r t)) =
       H.tr $ do
-        H.td $ toHtml n
-        H.td $ toHtml r
-        H.td $ toHtml i
+        H.td $
+          H.a ! A.href (toValue ( "/deploy?" ++ urlEncodeVars [
+            ("app", n), ("image", i), ("version", t), ("registry", r)])
+            ) $ toHtml n
+        H.td $
+          H.a ! A.href (toValue ( "/deploy?" ++ L.intercalate "&" (map (\(k,v) -> concat [k, "=", urlEncode v]) (
+            appSiblings r i ++ [("image", i), ("version", t), ("registry", r)] )))
+            ) $ toHtml $ concat [r, "/", i]
         H.td $ toHtml t
-        H.td $
-          H.form ! A.action "/deploy" ! A.method "get" $ do
-            H.input ! A.type_ "hidden" ! A.name "app" ! A.value (toValue n)
-            H.input ! A.type_ "hidden" ! A.name "image" ! A.value (toValue i)
-            H.input ! A.type_ "hidden" ! A.name "version" ! A.value (toValue t)
-            H.input ! A.type_ "hidden" ! A.name "registry" ! A.value (toValue r)
-            H.button ! A.class_ "button-xsmall pure-button-primary pure-button" $ "New version"
-        H.td $
-          H.form ! A.action (toValue (marUrl ++ "/ui/#/apps/" ++ urlEncode n)) !
-            A.method "get" $
-            H.button !
-              A.class_ "button-xsmall button-success pure-button" $ "Marathon"

@@ -39,24 +39,24 @@ routes = do
     blaze $ PA.page (marathonUrl conf) $ localApps conf apps
   get "/deploy" $ do
     conf <- lift ask
-    app <- readDockerApp
+    app <- fmap head readDockerApps
     let d = docker app
     tags <- liftIO $ listTags conf (registry d) (name d)
-    blaze $ PD.page app $ orderVersions tags
+    blaze $ PD.page app (marathonUrl conf) (orderVersions tags)
   post "/run" $ do
     conf <- lift ask
-    app <- readDockerApp
+    app <- fmap head readDockerApps
     uuid <- liftIO $ run conf app
     redirect $ LT.pack $ "/run/" ++ uuid
   get "/run/:uuid" $ do
     uuid <- param "uuid"
     blaze $ PR.page uuid
 
-readDockerApp :: ActionT LT.Text (ReaderT Configuration IO) DockerApp
-readDockerApp = do
-  app <- param "app"
+readDockerApps :: ActionT LT.Text (ReaderT Configuration IO) [DockerApp]
+readDockerApps = do
+  apps <- fmap (\l -> [LT.unpack v | (k,v) <- l, k == "app"]) params
   im <- DockerImage <$> param "image" <*> param "registry" <*> param "version"
-  return $ DockerApp app im
+  return $ map (`DockerApp` im) apps
 
 localApps :: Configuration -> [MarathonApp] -> [DockerApp]
 localApps conf apps = do
