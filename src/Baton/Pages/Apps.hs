@@ -42,7 +42,9 @@ page marUrl apps = header "Applications" $ do
             ("app", n), ("image", i), ("version", t), ("registry", r)])
             ) $ toHtml n
         H.td $
-          H.a ! A.href (toValue ( "/deploy?" ++ L.intercalate "&" (map (\(k,v) -> concat [k, "=", urlEncode v]) (
-            appSiblings r i ++ [("image", i), ("version", t), ("registry", r)] )))
+          H.a ! A.href (toValue ( "/deploy?" ++
+              -- Compose url manually, otherwise we get comma separated app query params
+              L.intercalate "&" (map (\(k,v) -> concat [k, "=", urlEncode v]) (
+              appSiblings r i ++ [("image", i), ("version", t), ("registry", r)] )))
             ) $ toHtml $ concat [r, "/", i]
         H.td $ toHtml t

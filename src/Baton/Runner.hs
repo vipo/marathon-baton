@@ -19,10 +19,10 @@ import           System.Exit
 import           System.IO
 import           System.Process
 
-run :: Configuration  -- ^ configuration
-    -> DockerApp      -- ^ docker app
-    -> IO String      -- ^ uuid of run
-run conf (DockerApp n (DockerImage i r t)) = do
+run :: Configuration         -- ^ configuration
+    -> (String, DockerImage) -- ^ docker app
+    -> IO String             -- ^ uuid of run
+run conf (n, DockerImage i r t) = do
   uuid <- fmap toString nextRandom
   let dir = workingDir conf ++ "/run/" ++ uuid
   createDirectoryIfMissing True dir

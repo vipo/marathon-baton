@@ -12,6 +12,7 @@ import           Baton.Versioning
 import qualified Baton.Pages.Apps as PA
 import qualified Baton.Pages.Deploy as PD
 import qualified Baton.Pages.Report as PR
+import qualified Baton.Pages.ReportList as PRL
 
 import           Control.Monad.Reader
 import qualified Data.List as L
@@ -39,24 +40,28 @@ routes = do
     blaze $ PA.page (marathonUrl conf) $ localApps conf apps
   get "/deploy" $ do
     conf <- lift ask
-    app <- fmap head readDockerApps
-    let d = docker app
+    (apps, d) <- readDockerApps
     tags <- liftIO $ listTags conf (registry d) (name d)
-    blaze $ PD.page app (marathonUrl conf) (orderVersions tags)
+    blaze $ PD.page (apps, d) (marathonUrl conf) (orderVersions tags)
   post "/run" $ do
     conf <- lift ask
-    app <- fmap head readDockerApps
-    uuid <- liftIO $ run conf app
-    redirect $ LT.pack $ "/run/" ++ uuid
+    (apps, d) <- readDockerApps
+    case apps of
+      [h] -> do
+        uuid <- liftIO $ run conf (h, d)
+        redirect $ LT.pack $ "/run/" ++ uuid
+      l -> do
+        uuids <- liftIO $ mapM (\e -> run conf (e, d)) l
+        blaze $ PRL.page (zip l uuids)
   get "/run/:uuid" $ do
     uuid <- param "uuid"
     blaze $ PR.page uuid
 
-readDockerApps :: ActionT LT.Text (ReaderT Configuration IO) [DockerApp]
+readDockerApps :: ActionT LT.Text (ReaderT Configuration IO) ([String], DockerImage)  -- ^ apps + image
 readDockerApps = do
   apps <- fmap (\l -> [LT.unpack v | (k,v) <- l, k == "app"]) params
   im <- DockerImage <$> param "image" <*> param "registry" <*> param "version"
-  return $ map (`DockerApp` im) apps
+  return (apps, im)
 
 localApps :: Configuration -> [MarathonApp] -> [DockerApp]
 localApps conf apps = do
