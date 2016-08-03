@@ -28,18 +28,17 @@ page (nh : nt, DockerImage i r t) marUrl versions =
       H.fieldset $ do
         H.div ! A.class_ "pure-control-group" $ do
           H.label ! A.for "app" $ "Applications"
-          H.input ! A.readonly "readonly" ! A.name "app" ! A.id "app" ! A.value (toValue nh)
-          marathonButton marUrl nh
+          H.input ! A.class_ "pure-input-2-3" ! A.style enabledLike ! A.readonly "readonly" ! A.name "app" ! A.id "app" ! A.value (toValue nh)
         forM_ nt appsRows
         H.div ! A.class_ "pure-control-group" $ do
           H.label ! A.for "registry" $ "Docker registry"
-          H.input ! A.readonly "readonly" ! A.name "registry" ! A.id "registry" ! A.value (toValue r)
+          H.input ! A.class_ "pure-input-2-3" ! A.style enabledLike ! A.readonly "readonly" ! A.name "registry" ! A.id "registry" ! A.value (toValue r)
         H.div ! A.class_ "pure-control-group" $ do
           H.label ! A.for "image" $ "Docker image"
-          H.input ! A.readonly "readonly" ! A.name "image" ! A.id "image" ! A.value (toValue i)
+          H.input ! A.class_ "pure-input-2-3" ! A.style enabledLike ! A.readonly "readonly" ! A.name "image" ! A.id "image" ! A.value (toValue i)
         H.div ! A.class_ "pure-control-group" $ do
           H.label ! A.for "version" $ "Image tag"
-          H.select ! A.name "version" ! A.id "version" $
+          H.select ! A.class_ "pure-input-2-3" ! A.style "border: 0px;" ! A.name "version" ! A.id "version" $
             forM_ versions (versionOption t)
         H.div ! A.class_ "pure-controls" $
           H.button ! A.type_ "submit" ! A.class_ "pure-button pure-button-primary" $ "Deploy"
@@ -48,8 +47,9 @@ page (nh : nt, DockerImage i r t) marUrl versions =
     appsRows n =
       H.div ! A.class_ "pure-control-group" $ do
         H.label ""
-        H.input ! A.readonly "readonly" ! A.name "app" ! A.value (toValue n)
-        marathonButton marUrl n
+        H.input ! A.class_ "pure-input-2-3" ! A.style enabledLike ! A.readonly "readonly" ! A.name "app" ! A.value (toValue n)
+
+enabledLike = "background: transparent; border: 0px;"
 
 versionOption :: String -> String -> H.Html
 versionOption curr ver =

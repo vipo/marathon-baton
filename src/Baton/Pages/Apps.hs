@@ -29,6 +29,7 @@ page marUrl apps = header "Applications" $ do
         H.th "Application name"
         H.th "Docker image"
         H.th "Image tag"
+        H.th ""
     H.tbody $
       forM_ apps appTableRow
   where
@@ -43,8 +44,9 @@ page marUrl apps = header "Applications" $ do
             ) $ toHtml n
         H.td $
           H.a ! A.href (toValue ( "/deploy?" ++
-              -- Compose url manually, otherwise we get comma separated app query params
+              -- Compose url manually, otherwise we get comma separated 'app' query params
               L.intercalate "&" (map (\(k,v) -> concat [k, "=", urlEncode v]) (
               appSiblings r i ++ [("image", i), ("version", t), ("registry", r)] )))
             ) $ toHtml $ concat [r, "/", i]
         H.td $ toHtml t
+        H.td $ marathonButton marUrl n
