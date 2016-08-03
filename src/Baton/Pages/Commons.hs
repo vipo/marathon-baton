@@ -29,9 +29,9 @@ header t b =
       H.style $ toHtml css
     H.body $
       H.div ! A.class_ "pure-g" $ do
-        H.div ! A.class_ "pure-u-5-24" $ ""
-        H.div ! A.class_ "pure-u-14-24" $ b
-        H.div ! A.class_ "pure-u-5-24" $ ""
+        H.div ! A.class_ "pure-u-2-24" $ ""
+        H.div ! A.class_ "pure-u-20-24" $ b
+        H.div ! A.class_ "pure-u-2-24" $ ""
 
 css = unlines [
     ".button-xsmall { font-size: 70%; }"
